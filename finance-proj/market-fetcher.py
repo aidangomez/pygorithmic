@@ -1,19 +1,30 @@
 import requests
-import json
+import io
 
-key = "iL5elbEixTmvV9RXgQHgNphPDwA8E2Wu0"
-refresh_token = "F22CT3CDmmmcQ-WVAGImykrKogLEaU370"
-server = "https://api01.iq.questrade.com/"
+tokenFile = io.open("tokeninfo.txt")
+key = tokenFile.readline().strip()
+refreshToken = tokenFile.readline().strip()
+
+server = "https://api01.iq.questrade.com/v1/"
+
+services = {"search_symbol":"symbols/search", "stock_info":"symbols/", "get_quotes":"makets/candles/"}
 
 def refresh_authentication():
-    r = requests.get("https://login.questrade.com/oauth2/token", params={"grant_type":"refresh_token", "refresh_token":refresh_token})
+    r = requests.get("https://login.questrade.com/oauth2/token", params={"grant_type":"refresh_token", "refresh_token":refreshToken})
+    print("REFRESH " + r.text)
     key = r.json()["access_token"]
     refresh_token = r.json()["refresh_token"]
+    # tokenFile.writelines([key, refresh_token])
     return r
 
-def send(service):
+def send(service, params = None):
     headers = {"Authorization": "Bearer " + key}
     r = requests.get(server + service, headers=headers)
+    print(key)
+    print(refreshToken)
+    print("RESPONSE " + r.text)
+    print("REFRESH " + refresh_authentication().text)
+    r = requests.get(server + service, headers=headers, params=params)
     return r
 
 
@@ -23,5 +34,5 @@ def send(service):
 if __name__ == "__main__":
     # response = a.refresh_authentication()
     # print(response.text)
-    response = send("v1/accounts")
-    print(response.text)
+    response = send("accounts")
+    print("RESPONSE " + response.text)
