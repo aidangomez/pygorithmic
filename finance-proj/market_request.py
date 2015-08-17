@@ -1,17 +1,53 @@
 import requests
-import market-fetcher
+import io
 
-def stockQuote(symbol, start_date, end_date):
-    stockList = send(services["search_symbol"], params={"prefix":symbol})
-    stockId = stockList[0]["symbolId"]
+from market_exceptions import *
 
-    startDate = start_date + "T00:00:00-05:00"
-    endDate = end_date + "T00:00:00-05:00"
+class MarketRequest:
+    headers = lambda self, key: {"Authorization": "Bearer " + self.key}
+    services = {"search_symbol":"v1/symbols/search", "stock_info":"v1/symbols/", "get_quotes":"v1/makets/candles/"}
 
-    return send(services["get_quotes"], params={"id":stockId, "startTime":startDate, "endTime":endDate, "interval":"FiveMinutes"})
+    def __init__(self):
+        # read in token information
+        tokenFile = io.open("tokeninfo.txt")
+        self.key = tokenFile.readline().strip()
+        self.refreshToken = tokenFile.readline().strip()
+        self.server = tokenFile.readline().strip()
+        tokenFile.close()
 
-if __name__ == "__main__":
-    # response = a.refresh_authentication()
-    # print(response.text)
-    response = send("accounts")
-    print(response.text)
+    def checkRequest(self, request):
+         code = request.status_code
+         if (code == 200):
+             return 1
+         elif (code == 202):
+             return 1
+         elif (code == 401):
+             raise AccessTokenError("bad access token")
+         elif (code == 400):
+             raise BadRequestError("bad request")
+         elif (code == 404):
+             raise InvalidEndpointError("invalid endpoint: " + request.url)
+         else:
+             print("ERROR: " + str(code))
+             print(request.text)
+             raise Exception
+
+    def refreshAuthentication(self):
+        r = requests.get("https://login.questrade.com/oauth2/token", params={"grant_type":"refresh_token", "refresh_token":self.refreshToken})
+        if (self.checkRequest(r)):
+            tokenFile = io.open("tokeninfo.txt", mode="wt")
+            self.key = r.json()["access_token"]
+            self.refreshToken = r.json()["refresh_token"]
+            self.server = r.json()["api_server"]
+            tokenFile.writelines('\n'.join([self.key, self.refreshToken, self.server]))
+            tokenFile.close()
+        return r
+
+    def send(self, service, params = None):
+        r = requests.get(self.server + service, headers=self.headers(self.key))
+        try:
+            self.checkRequest(r)
+        except AccessTokenError:
+            self.refreshAuthentication()
+            r = requests.get(self.server + service, headers=self.headers(self.key))
+        return r

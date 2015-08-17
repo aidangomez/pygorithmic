@@ -11,10 +11,10 @@ def exponentialMovingAverage(x, n):
     x = np.array(x)
 
     # initialize exponential weights
-    weights = np.exp(np.linspace(-1.0, 0.0, n)
-    weights /= sum(weights)
+    weights = np.exp(np.linspace(-1.0, 0.0, n))
+    weights /=  sum(weights)
 
-    result = np.convolve(s, weights)[:len(x)]
+    result = np.convolve(x, weights)[:len(x)]
     result[:n] = result[n]
     return result
 
