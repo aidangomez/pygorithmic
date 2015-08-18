@@ -12,3 +12,10 @@ def drawLines(arrayOfLines):
         for j in range(numLines):
             line.append(arrayOfLines[j][i])
         f.write(", ".join(line) + "\n")
+
+    f.close()
+    cmd = []
+    for i in range(numLines):
+        cmd.append(' \'f.txt\' using 0:' + str(i) + ' w l')
+    os.system("gnuplot -persist -e \" plot" + ",".join(cmd) + "\"")
+    os.remove("f.txt")
