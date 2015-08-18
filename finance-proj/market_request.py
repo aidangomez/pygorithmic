@@ -5,7 +5,6 @@ from market_exceptions import *
 
 class MarketRequest:
     headers = lambda self, key: {"Authorization": "Bearer " + self.key}
-    services = {"search_symbol":"v1/symbols/search", "stock_info":"v1/symbols/", "get_quotes":"v1/makets/candles/"}
 
     def __init__(self):
         # read in token information
