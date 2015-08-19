@@ -21,11 +21,13 @@ class MarketRequest:
          elif (code == 202):
              return 1
          elif (code == 401):
-             raise AccessTokenError("bad access token")
+             raise AccessTokenError("Bad access token.")
          elif (code == 400):
-             raise BadRequestError("bad request")
+             raise BadRequestError("Bad request.")
          elif (code == 404):
-             raise InvalidEndpointError("invalid endpoint: " + request.url)
+             raise InvalidEndpointError("Invalid endpoint: " + request.url)
+         elif (code == 429):
+             raise LimitExceededError("Too many requests. Reset in: " + str(request.headers["X-RateLimit-Reset"]))
          else:
              print("ERROR: " + str(code))
              print(request.text)
