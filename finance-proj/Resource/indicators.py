@@ -1,18 +1,21 @@
 """
-Big thank you to pylab for pieces of the EMA, MACD and RSI implementations.
+Big thank you to pylab for most of the (E)MA, MACD and RSI implementations.
 http://matplotlib.org/examples/pylab_examples/finance_work2.html
 """
 
 import numpy as np
 
 
-def exponentialMovingAverage(x, n):
+def movingAverage(x, n, mode="exp"):
     """
     precondition: n > len(x)
+    mode can be either 'exp' for exponential, or 'lin' for linear
     """
     x = np.array(x)
-
-    weights = np.exp(np.linspace(-1.0, 0.0, n))
+    if (mode == 'lin'):
+        weights = np.ones(n)
+    elif (mode == 'exp'):
+        weights = np.exp(np.linspace(-1.0, 0.0, n))
     weights /= sum(weights)
 
     result = np.convolve(x, weights)[:len(x)]
@@ -21,9 +24,9 @@ def exponentialMovingAverage(x, n):
 
 
 def movingAverageConvergenceDivergence(x, signalTerm=9, fastTerm=12, slowTerm=26):
-    slow = exponentialMovingAverage(x, slowTerm)
-    fast = exponentialMovingAverage(x, fastTerm)
-    signal = exponentialMovingAverage(fast - slow, signalTerm)
+    slow = movingAverage(x, slowTerm)
+    fast = movingAverage(x, fastTerm)
+    signal = movingAverage(fast - slow, signalTerm)
     return (fast - slow, signal)
 
 
@@ -65,4 +68,5 @@ def stochastic(x, n=14):
         elif (x[i - n - 1] == low):
             low = np.amin(x[i - n:i])
         stoch[i] = 100 * (x[i] - low) / (high - low)
-    return stoch
+    signal = movingAverage(stoch, 3, 'lin')
+    return (stoch, signal)
