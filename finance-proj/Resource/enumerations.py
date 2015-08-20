@@ -12,9 +12,10 @@ class Time:
     TwoHours = "TwoHours"
     FourHours = "FourHours"
     OneDay = "OneDay"
-    OneWeek	= "OneWeek"
+    OneWeek = "OneWeek"
     OneMonth = "OneMonth"
     OneYear = "OneYear"
+
 
 class RequestType:
     searchSymbol = "v1/symbols/search"

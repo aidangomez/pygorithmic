@@ -1,5 +1,6 @@
 import os
 
+
 def drawLines(arrayOfLines):
     numLines = len(arrayOfLines)
     if (numLines > 10):
