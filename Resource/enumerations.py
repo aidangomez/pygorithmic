@@ -16,12 +16,23 @@ class Time:
     OneMonth = "OneMonth"
     OneYear = "OneYear"
 
+class OrderType:
+    Market = "Market"
+    Limit = "Limit"
+    Stop = "Stop"
+    StopLimit = "StopLimit"
+    TrailStopInPercentage = "TrailStopInPercentage"
+    TrailStopInDollar = "TrailStopInDollar"
+    TrailStopLimitInPercentage = "TrailStopLimitInPercentage"
+    TrailStopLimitInDollar = "TrailStopLimitInDollar"
+    LimitOnOpen = "LimitOnOpen"
+    LimitOnClose = "LimitOnClose"
 
 class RequestType:
     class Market:
         searchSymbol = "v1/symbols/search"
-        getInfo = "v1/symbols/"
-        getQuotes = "v1/markets/candles/"
+        getInfo = lambda id: "v1/symbols/%s" % id
+        getQuotes = lambda id: "v1/markets/candles/%s" % id
     class Account:
         getAccounts = "v1/accounts"
         getPositions = lambda id: "v1/accounts/%s/positions" % id

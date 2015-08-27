@@ -28,7 +28,7 @@ class MarketRequest:
             tokenFile.close()
         return r
 
-    def send(self, service, params=None):
+    def get(self, service, params=None):
         r = requests.get(self.server + service,
                          headers=self.headers(self.key), params=params)
         try:
@@ -36,6 +36,28 @@ class MarketRequest:
         except (AccessTokenError, BadRequestError):
             self.refreshAuthentication()
             r = requests.get(self.server + service,
+                             headers=self.headers(self.key), params=params)
+        return checkRequest(r).json()
+
+    def post(self, service, params=None):
+        r = requests.post(self.server + service,
+                         headers=self.headers(self.key), params=params)
+        try:
+            checkRequest(r)
+        except (AccessTokenError, BadRequestError):
+            self.refreshAuthentication()
+            r = requests.post(self.server + service,
+                             headers=self.headers(self.key), params=params)
+        return checkRequest(r).json()
+
+    def delete(self, service, params=None):
+        r = requests.delete(self.server + service,
+                         headers=self.headers(self.key), params=params)
+        try:
+            checkRequest(r)
+        except (AccessTokenError, BadRequestError):
+            self.refreshAuthentication()
+            r = requests.delete(self.server + service,
                              headers=self.headers(self.key), params=params)
         return checkRequest(r).json()
 
@@ -63,7 +85,7 @@ class AccountRequest:
             tokenFile.close()
         return r
 
-    def send(self, service, params=None):
+    def get(self, service, params=None):
         r = requests.get(self.server + service,
                          headers=self.headers(self.key), params=params)
         try:
@@ -71,5 +93,27 @@ class AccountRequest:
         except (AccessTokenError, BadRequestError):
             self.refreshAuthentication()
             r = requests.get(self.server + service,
+                             headers=self.headers(self.key), params=params)
+        return checkRequest(r).json()
+
+    def post(self, service, params=None):
+        r = requests.post(self.server + service,
+                         headers=self.headers(self.key), params=params)
+        try:
+            checkRequest(r)
+        except (AccessTokenError, BadRequestError):
+            self.refreshAuthentication()
+            r = requests.post(self.server + service,
+                             headers=self.headers(self.key), params=params)
+        return checkRequest(r).json()
+
+    def delete(self, service, params=None):
+        r = requests.delete(self.server + service,
+                         headers=self.headers(self.key), params=params)
+        try:
+            checkRequest(r)
+        except (AccessTokenError, BadRequestError):
+            self.refreshAuthentication()
+            r = requests.delete(self.server + service,
                              headers=self.headers(self.key), params=params)
         return checkRequest(r).json()
