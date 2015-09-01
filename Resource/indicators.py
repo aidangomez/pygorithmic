@@ -26,8 +26,10 @@ def movingAverage(x, n, mode="exp"):
 def movingAverageConvergenceDivergence(x, signalTerm=9, fastTerm=12, slowTerm=26):
     slow = movingAverage(x, slowTerm)
     fast = movingAverage(x, fastTerm)
-    signal = movingAverage(fast - slow, signalTerm)
-    return (fast - slow, signal)
+    macd = fast - slow
+    signal = movingAverage(macd, signalTerm)
+    print(macd)
+    return (macd, signal)
 
 
 def relativeStrength(x, n=14):

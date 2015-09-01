@@ -1,4 +1,4 @@
-def checkRequest(self, request):
+def checkRequest(request):
     code = request.status_code
     if (code == 200):
         return request

@@ -9,7 +9,7 @@ def stockQuotes(symbol, startDate, endDate, timeFrame):
     """
     dates povided in string as "year-month-day"
     """
-    request = questrade_replace.MarketRequest()
+    request = questrade_request.MarketRequest()
     stockList = request.get(RequestType.Market.searchSymbol,
                              params={"prefix": symbol})
     stockId = stockList["symbols"][0]["symbolId"]

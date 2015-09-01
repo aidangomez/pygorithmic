@@ -9,7 +9,7 @@ class MarketRequest:
 
     def __init__(self):
         # read in token information
-        tokenFile = io.open("mrkt_token.txt")
+        tokenFile = io.open("Tokens/mrkt_token.txt")
         self.key = tokenFile.readline().strip()
         self.refreshToken = tokenFile.readline().strip()
         self.server = tokenFile.readline().strip()
@@ -19,7 +19,7 @@ class MarketRequest:
         r = requests.get("https://login.questrade.com/oauth2/token", params={
                          "grant_type": "refresh_token", "refresh_token": self.refreshToken})
         if (checkRequest(r)):
-            tokenFile = io.open("mrkt_token.txt", mode="wt")
+            tokenFile = io.open("Tokens/mrkt_token.txt", mode="wt")
             self.key = r.json()["access_token"]
             self.refreshToken = r.json()["refresh_token"]
             self.server = r.json()["api_server"]
@@ -66,7 +66,7 @@ class AccountRequest:
 
     def __init__(self):
         # read in token information
-        tokenFile = io.open("acnt_token.txt")
+        tokenFile = io.open("Tokens/acnt_token.txt")
         self.key = tokenFile.readline().strip()
         self.refreshToken = tokenFile.readline().strip()
         self.server = tokenFile.readline().strip()
@@ -76,7 +76,7 @@ class AccountRequest:
         r = requests.get("https://login.questrade.com/oauth2/token", params={
                          "grant_type": "refresh_token", "refresh_token": self.refreshToken})
         if (checkRequest(r)):
-            tokenFile = io.open("acnt_token.txt", mode="wt")
+            tokenFile = io.open("Tokens/acnt_token.txt", mode="wt")
             self.key = r.json()["access_token"]
             self.refreshToken = r.json()["refresh_token"]
             self.server = r.json()["api_server"]
