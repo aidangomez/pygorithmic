@@ -21,23 +21,3 @@ def stockQuotes(symbol, startDate, endDate, timeFrame):
                         params={"startTime": startDate,
                                 "endTime": endDate,
                                 "interval": timeFrame})["candles"]
-
-
-def populateDB(stockname, quotes):
-    connection = sqlite3.connect("quotes.db")
-    cursor = connection.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS {} (start, end, low, high, open,\
-        close, volume)".format(stockname))
-
-    quoteList = []
-    for quote in quotes:
-        tempQuote = Quote(quote)
-        quoteList.append(tempQuote)
-
-        cursor.execute("INSERT INTO {} VALUES (?, ?, ?, ?, ?, ?, ?)".format(stockname),
-                       (tempQuote.start, tempQuote.end, tempQuote.low,
-                        tempQuote.high, tempQuote.open, tempQuote.close, tempQuote.volume))
-
-    connection.commit()
-    cursor.close()
-    connection.close()
