@@ -1,5 +1,8 @@
 # compiled python files
 *.pyc
 
+# token files
+questrade-tokens/
+
 # temp files
 *.txt
