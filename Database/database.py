@@ -14,6 +14,7 @@ class Database:
         self.cursor = self.connection.cursor()
 
     def close(self):
+        self.connection.commit()
         self.cursor.close()
         self.connection.close()
 
@@ -24,11 +25,13 @@ class Database:
     def insert(self, table, values):
         self.cursor.execute("INSERT INTO {0} VALUES ({1})"\
                             .format(table, ','.join(str(x) for x in values)))
+        self.connection.commit()
 
     def delete(self, table, columns, values):
         wheres = [str(x)+"=\'"+str(y)+"\'" for x,y in zip(columns,values)]
         self.cursor.execute("DELETE FROM {0} WHERE {1}"\
                             .format(table, " AND ".join(wheres)))
+        self.connection.commit()
 
     def nextFromTable(self, table):
         self.cursor.execute("SELECT * FROM {0}".format(table))
@@ -38,3 +41,4 @@ class Database:
         updates = [str(x)+"=\'"+str(y)+"\'" for x,y in zip(updateColumns, updateValues)]
         wheres = [str(x)+"=\'"+str(y)+"\'" for x,y in zip(whereColumns, whereValues)]
         self.cursor.execute("UPDATE {0} SET {1} WHERE {2}".format(table, ", ".join(updates), "AND ".join(wheres)))
+        self.connection.commit()
