@@ -80,14 +80,23 @@ class OrderType:
     LimitOnOpen = "LimitOnOpen"
     LimitOnClose = "LimitOnClose"
 
+
 class RequestType:
+
     class Market:
         searchSymbol = "v1/symbols/search"
-        getInfo = lambda id: "v1/symbols/%s" % id
-        getQuotes = lambda id: "v1/markets/candles/%s" % id
+
+        def getInfo(id): return "v1/symbols/%s" % id
+
+        def getQuotes(id): return "v1/markets/candles/%s" % id
+
     class Account:
         getAccounts = "v1/accounts"
-        getPositions = lambda id: "v1/accounts/%s/positions" % id
-        getBalances = lambda id: "v1/accounts/%s/balances" % id
-        getExecutions = lambda id: "v1/accounts/%s/executions" % id
-        order = lambda id: "v1/accounts/%s/orders" % id
+
+        def getPositions(id): return "v1/accounts/%s/positions" % id
+
+        def getBalances(id): return "v1/accounts/%s/balances" % id
+
+        def getExecutions(id): return "v1/accounts/%s/executions" % id
+
+        def order(id): return "v1/accounts/%s/orders" % id

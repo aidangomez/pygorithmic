@@ -1,23 +1,21 @@
 import sqlite3
 
 import questrade_request
-from Resource.enumerations import Time, RequestType
+from Resource.enumerations import Interval, RequestType
 from Resource.objects import Quote
 
 
-def stockQuotes(symbol, startDate, endDate, timeFrame):
+def stockQuotes(symbol, startDate, endDate, interval):
     """
-    dates povided in string as "year-month-day"
+    interval is an Resource.enumerations.Interval
+
     """
     request = questrade_request.MarketRequest()
     stockList = request.get(RequestType.Market.searchSymbol,
-                             params={"prefix": symbol})
+                            params={"prefix": symbol})
     stockId = stockList["symbols"][0]["symbolId"]
 
-    startDate = startDate + "T00:00:00-05:00"
-    endDate = endDate + "T00:00:00-05:00"
-
     return request.get(RequestType.Market.getQuotes(stockId),
-                        params={"startTime": startDate,
-                                "endTime": endDate,
-                                "interval": timeFrame})["candles"]
+                       params={"startTime": startDate,
+                               "endTime": endDate,
+                               "interval": interval.string})["candles"]

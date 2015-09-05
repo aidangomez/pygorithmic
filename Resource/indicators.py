@@ -23,7 +23,8 @@ def movingAverage(x, n, mode="exp"):
     return result
 
 
-def movingAverageConvergenceDivergence(x, signalTerm=9, fastTerm=12, slowTerm=26):
+def movingAverageConvergenceDivergence(x, signalTerm=9, fastTerm=12,
+                                       slowTerm=26):
     slow = movingAverage(x, slowTerm)
     fast = movingAverage(x, fastTerm)
     macd = fast - slow

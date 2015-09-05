@@ -4,6 +4,7 @@ from enumerations import Interval
 
 
 class Quote:
+
     def __init__(self, quote):
         self.start = quote["start"]
         self.end = quote["end"]

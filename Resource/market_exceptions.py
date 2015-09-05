@@ -11,8 +11,9 @@ def checkRequest(request):
     elif (code == 404):
         raise InvalidEndpointError("Invalid endpoint: " + request.url)
     elif (code == 429):
-        raise LimitExceededError(
-            "Too many requests. Reset in: " + str(request.headers["X-RateLimit-Reset"]))
+        print(request.text)
+        raise LimitExceededError("Too many requests. Reset in: " +
+                                 str(request.headers["X-RateLimit-Reset"]))
     else:
         print("UNKNOWN ERROR: " + str(code))
         print(request.text)

@@ -1,19 +1,26 @@
 import Debug.plot_graph
-import account_manager
-import market_fetcher
-import questrade_request
+import Debug.algo_tester
+
 import Resource.enumerations
 import Resource.indicators
 import Resource.objects
+import Resource.algorithm
+
+import account_manager
+import market_fetcher
+import questrade_request
+
 
 if __name__ == '__main__':
     prices = []
     stockName = "AAPL"
-    start = "2013-01-01"
-    end = "2014-01-01"
-    quotes = market_fetcher.stockQuotes(stockName, start, end, Resource.enumerations.Time.OneDay)
+    start = "2015-09-01"
+    end = "2015-09-02"
+    timeFrame = Resource.enumerations.Interval.OneMinute.string
 
-    i=0
+    quotes = market_fetcher.stockQuotes(stockName, start, end, timeFrame)
+
+    i = 0
     for quote in quotes:
         i = i + 1
         quote = Resource.objects.Quote(quote)
@@ -22,4 +29,5 @@ if __name__ == '__main__':
             print(quote.end)
 
     print(prices)
-    Debug.plot_graph.drawLines(Resource.indicators.movingAverageConvergenceDivergence(prices))
+    Debug.plot_graph.drawLines(Resource.indicators
+                               .movingAverageConvergenceDivergence(prices))
