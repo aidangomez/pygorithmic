@@ -1,3 +1,8 @@
+from datetime import datetime
+
+from enumerations import Interval
+
+
 class Quote:
     def __init__(self, quote):
         self.start = quote["start"]
@@ -8,7 +13,16 @@ class Quote:
         self.close = quote["close"]
         self.volume = quote["volume"]
 
-class Time(str):
-    def __new__(cls, year, month, day, hour="00", min="00", sec="00"):
-        string = '-'.join([year, month, day]) + "T" + ":".join([hour, min, sec]) + "-05:00"
-        return str.__new__(cls, string)
+
+class Time:
+
+    def __init__(self, year, month, day, hour="00", min="00", sec="00",
+                 interval=Interval.OneDay.delta):
+        self.date = datetime(year, month, day, hour, min, second)
+        self.delta = interval
+
+    def __repr__(self):
+        return self.date.isoformat() + "-05:00"
+
+    def __iadd__(self, b):
+        self.date += b * self.delta
