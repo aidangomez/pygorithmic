@@ -1,6 +1,12 @@
 from dateutil.relativedelta import *
 
 
+class AlgorithmResponse:
+    Buy = "Buy"
+    Sell = "Sell"
+    Hold = "Hold"
+
+
 class Interval:
 
     class OneMinute:
