@@ -35,15 +35,18 @@ class AccessTokenError(Exception):
 class BadRequestError(Exception):
 
     def __init__(self, value):
-        code = value.json()["code"]
-        if (code == 1002):
-            self.value = "Invalid argument."
-        elif (code == 1003):
-            self.value = "Argument length exceeds limit."
-        elif (code == 1004):
-            self.value = "Missing required argument."
-        elif (code == 1015):
-            self.value = "Invalid argument."
+        try:
+            code = value.json()["code"]
+            if (code == 1002):
+                self.value = "Invalid argument."
+            elif (code == 1003):
+                self.value = "Argument length exceeds limit."
+            elif (code == 1004):
+                self.value = "Missing required argument."
+            elif (code == 1015):
+                self.value = "Invalid argument."
+        except ValueError:
+            self.value = "Bad Request: " + str(value.headers)
 
     def __str__(self):
         return repr(self.value)
@@ -52,15 +55,18 @@ class BadRequestError(Exception):
 class NotFoundError(Exception):
 
     def __init__(self, value):
-        code = value.json()["code"]
-        if (code == 1001):
-            self.value = "Invalid endpoint."
-        elif (code == 1018):
-            self.value = "Account number not found."
-        elif (code == 1019):
-            self.value = "Symbol not found."
-        elif (code == 1020):
-            self.value = "Order not found."
+        try:
+            code = value.json()["code"]
+            if (code == 1001):
+                self.value = "Invalid endpoint."
+            elif (code == 1018):
+                self.value = "Account number not found."
+            elif (code == 1019):
+                self.value = "Symbol not found."
+            elif (code == 1020):
+                self.value = "Order not found."
+        except ValueError:
+            self.value = "Not Found Error."
 
     def __str__(self):
         return repr(self.value)
