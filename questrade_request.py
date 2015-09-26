@@ -13,7 +13,10 @@ class MarketRequest:
 
     def __init__(self):
         # read in token information
-        tokenFile = io.open("Tokens/mrkt_token.txt")
+        tokenFile = io.open("questrade-tokens/market-tokens.txt")
+        if tokenFile is None:
+            raise Exception("Token file note found at: questrade-tokens/market-tokens.txt")
+
         self.key = tokenFile.readline().strip()
         self.refreshToken = tokenFile.readline().strip()
         self.server = tokenFile.readline().strip()
@@ -24,7 +27,7 @@ class MarketRequest:
                          params={"grant_type": "refresh_token",
                                  "refresh_token": self.refreshToken})
         if (checkRequest(r)):
-            tokenFile = io.open("Tokens/mrkt_token.txt", mode="wt")
+            tokenFile = io.open("questrade-tokens/market-tokens.txt", mode="wt")
             self.key = r.json()["access_token"]
             self.refreshToken = r.json()["refresh_token"]
             self.server = r.json()["api_server"]
@@ -76,7 +79,10 @@ class AccountRequest:
 
     def __init__(self):
         # read in token information
-        tokenFile = io.open("Tokens/acnt_token.txt")
+        tokenFile = io.open("questrade-tokens/account-tokens.txt")
+        if tokenFile is None:
+            raise Exception("Token file note found at: questrade-tokens/account-tokens.txt")
+
         self.key = tokenFile.readline().strip()
         self.refreshToken = tokenFile.readline().strip()
         self.server = tokenFile.readline().strip()
@@ -87,7 +93,7 @@ class AccountRequest:
                          params={"grant_type": "refresh_token",
                                  "refresh_token": self.refreshToken})
         if (checkRequest(r)):
-            tokenFile = io.open("Tokens/acnt_token.txt", mode="wt")
+            tokenFile = io.open("questrade-tokens/account-tokens.txt", mode="wt")
             self.key = r.json()["access_token"]
             self.refreshToken = r.json()["refresh_token"]
             self.server = r.json()["api_server"]
