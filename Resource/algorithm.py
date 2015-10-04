@@ -1,4 +1,4 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 
 from Resource.enumerations import AlgorithmResponse
 
@@ -15,9 +15,8 @@ class Algorithm(metaclass=ABCMeta):
                 return True
         return NotImplemented
 
-    @classmethod
     @abstractmethod
-    def advise(stockName, data):
+    def advise(self, data):
         '''
         Implementation as an example only
 
@@ -27,9 +26,4 @@ class Algorithm(metaclass=ABCMeta):
         precondition: data >= self.minDataSize
         returns: an AlgorithmResponse
         '''
-        if (x[-1] > x[0]):
-            return AlgorithmResponse.Buy
-        elif (x[-1] < x[0]):
-            return AlgorithmResponse.Sell
-        else:
-            return AlgorithmResponse.Hold
+        pass
