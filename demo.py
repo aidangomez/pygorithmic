@@ -16,16 +16,27 @@ from questrade_request import *
 
 
 if __name__ == '__main__':
+    # Using AAPL with data from 1990 to today
     stockName = "AAPL"
-    startDate = Time(1990, 1, 1)
+    startDate = Time(year=1990, month=1, day=1)
+
+    # Use a sample algorithm
+    algo = SampleAlgo()
 
     data = []
+    dates = []
 
+    # Create a database and populate it with Apple's trade data
     db = database.Database("test")
+    populate_database.populate(db, stockName, startDate)
+    
     db.cursor.execute("SELECT * FROM {}".format(stockName))
+
     row = db.cursor.fetchone()
     while (row is not None):
-        data += row['close']
+        data.append(float(row['close']))
+        dates.append(row['timestamp'])
         row = db.cursor.fetchone()
 
-    tester = AlgoTester(, data)
+    tester = AlgoTester(algo, data, stockName, dates)
+    tester.evaluate(5)
