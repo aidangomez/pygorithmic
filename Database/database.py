@@ -22,7 +22,7 @@ class Database:
 
     def createTable(self, table, columns):
         self.cursor.execute("CREATE TABLE IF NOT EXISTS {0} ({1})"
-                            .format(table, ','.join(str(x) for x in columns)))
+                            .format(table, ','.join('\"'+ str(x) + '\"' for x in columns)))
 
     def insert(self, table, values):
         self.cursor.execute("INSERT INTO {0} VALUES ({1})"
@@ -44,7 +44,7 @@ class Database:
         return self.cursor.fetchone()
 
     def nextFromTable(self, table):
-        allFromTable(table)
+        self.allFromTable(table)
         return self.cursor.fetchone()
 
     def update(self, table, updateColumns, updateValues, whereColumns,
@@ -61,3 +61,7 @@ class Database:
         self.cursor.execute("SELECT * FROM {0} ORDER BY {1}".format(table,
                                                                     column))
         self.connection.commit()
+
+    def numRows(self, table):
+        self.cursor.execute("SELECT COUNT(*) AS value FROM {0}".format(table))
+        return self.next()['value']
