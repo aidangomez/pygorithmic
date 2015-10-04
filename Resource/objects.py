@@ -1,4 +1,5 @@
 from datetime import datetime, tzinfo
+import time
 
 from Resource.enumerations import Interval
 
@@ -17,9 +18,13 @@ class Quote:
 
 class Time:
 
-    def __init__(self, year, month, day, hour=0, min=0, sec=0,
+    def __init__(self, timestamp=None, year=1, month=1, day=1, hour=0, min=0, sec=0,
                  interval=Interval.OneDay):
-        self.date = datetime(year, month, day, hour, min, sec)
+        if (timestamp is None):
+            self.date = datetime(year, month, day, hour, min, sec)
+        else:
+            timeobj = time.strptime(timestamp[:19], "%Y-%m-%dT%H:%M:%S")
+            self.date = datetime.fromtimestamp(time.mktime(timeobj))
         self.interval = interval
 
     def __repr__(self):
@@ -27,7 +32,7 @@ class Time:
 
     def __add__(self, b):
         newDate = self.date + b * self.interval.delta
-        newTime = Time(1, 1, 1, interval=self.interval)
+        newTime = Time(interval=self.interval)
         newTime.date = newDate
         return newTime
 
