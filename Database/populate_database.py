@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from Database import database
-import market_fetcher
+from Questrade import market_fetcher
 
 
 def populate(db, symbol, startDate):

@@ -1,4 +1,4 @@
-import questrade_request
+from Questrade import questrade_request
 from Resource.enumerations import RequestType
 
 

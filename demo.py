@@ -11,8 +11,8 @@ from Resource.indicators import *
 from Resource.objects import *
 
 from account_manager import *
-from market_fetcher import *
-from questrade_request import *
+from Questrade.market_fetcher import *
+from Questrade.questrade_request import *
 
 
 if __name__ == '__main__':

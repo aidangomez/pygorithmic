@@ -1,6 +1,6 @@
 import sqlite3
 
-import questrade_request
+from Questrade import questrade_request
 from Resource.enumerations import Interval, RequestType
 from Resource.objects import Quote
 
@@ -14,4 +14,5 @@ def stockQuotes(symbol, startDate, endDate):
     return request.get(RequestType.Market.getQuotes(stockId),
                        params={"startTime": str(startDate),
                                "endTime": str(endDate),
-                               "interval": startDate.interval.string})["candles"]
+                               "interval": startDate.interval.string
+                               })["candles"]
