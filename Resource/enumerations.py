@@ -7,6 +7,11 @@ class AlgorithmResponse:
     Hold = "Hold"
 
 
+class SortingOrder:
+    Ascending = "ASC"
+    Descending = "DESC"
+
+
 class Interval:
 
     class OneMinute:
