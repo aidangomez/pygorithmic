@@ -18,8 +18,8 @@ class Quote:
 
 class Time:
 
-    def __init__(self, timestamp=None, year=1, month=1, day=1, hour=0, min=0, sec=0,
-                 interval=Interval.OneDay):
+    def __init__(self, timestamp=None, year=1, month=1, day=1, hour=0, min=0,
+                 sec=0, interval=Interval.OneDay):
         if (timestamp is None):
             self.date = datetime(year, month, day, hour, min, sec)
         else:

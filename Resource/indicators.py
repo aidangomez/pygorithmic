@@ -29,7 +29,6 @@ def movingAverageConvergenceDivergence(x, signalTerm=9, fastTerm=12,
     fast = movingAverage(x, fastTerm)
     macd = fast - slow
     signal = movingAverage(macd, signalTerm)
-    print(macd)
     return (macd, signal)
 
 

@@ -41,8 +41,8 @@ class AlgoTester:
     def buy(self, timestamp, price, amount):
         print("Buying: " + str(amount) + " $" + str(price) + " @: " +
               str(timestamp))
-        self.accountDatabase.insert("Transactions", ["Buy", price, amount,
-                                                     timestamp])
+        self.accountDatabase.insert("Transactions",
+                                    ["Buy", price, amount, timestamp])
         row = self.accountDatabase.nextFromTable("OpenPositions")
         if (row is not None):
             oldAmount = int(row["amount"])
@@ -67,8 +67,8 @@ class AlgoTester:
         openPrice = float(row["price"])
         if (amount == "all"):
             amount = int(row["amount"])
-            self.accountDatabase.delete("OpenPositions", ["price"],
-                                        [openPrice])
+            self.accountDatabase.deleteRows("OpenPositions", ["price"],
+                                            [openPrice])
         else:
             openAmount = int(row["amount"])
             self.accountDatabase.update("OpenPositions", ["amount"],
