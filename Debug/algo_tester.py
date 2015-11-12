@@ -1,7 +1,7 @@
 from Resource import algorithm
 from Resource.enumerations import AlgorithmResponse
 from Resource.objects import Time
-from Database import database
+from Database.temporary_database import TemporaryDatabase
 
 
 class AlgoTester:
@@ -21,7 +21,7 @@ class AlgoTester:
         self.data = data
         self.dates = dates
         self.stockName = stockName
-        self.accountDatabase = database.Database("TestDatabaseAccount")
+        self.accountDatabase = TemporaryDatabase("TestDatabaseAccount")
         self.accountDatabase.createTable("Transactions",
                                          ["order", "price", "amount",
                                           "timestamp"])
