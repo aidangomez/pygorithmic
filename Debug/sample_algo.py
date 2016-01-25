@@ -1,6 +1,6 @@
+from Debug import plot_graph
 from Resource.algorithm import Algorithm
 from Resource.enumerations import AlgorithmResponse
-
 from Resource import indicators
 
 
@@ -10,45 +10,67 @@ class SampleAlgo(Algorithm):
         Will buy on an upward trend and sell on a downward one.
         '''
         if (data[-1] > data[0]):
-            return AlgorithmResponse.Buy
+            return AlgorithmResponse.buy
         elif (data[-1] < data[0]):
-            return AlgorithmResponse.Sell
+            return AlgorithmResponse.sell
         else:
-            return AlgorithmResponse.Hold
+            return AlgorithmResponse.hold
 
 
 class MACDAlgo(Algorithm):
-    def __init__(self, initialData):
+    def __init__(self, initial_data):
         super().__init__(26)
-        self.storedData = initialData
+        self.stored_data = initial_data
 
     def advise(self, data):
-        self.storedData += data
-        (MACD, signal) = indicators.movingAverageConvergenceDivergence(
-                            self.storedData)
-        MACDslope = MACD[-1] - MACD[-2]
+        self.stored_data += data
+        (macd, signal) = indicators.moving_average_convergence_divergence(
+                            self.stored_data)
+        macd_slope = macd[-1] - macd[-2]
 
-        if (MACDslope > 0) & (MACD[-1] < signal[-1]):
-            return AlgorithmResponse.Buy
-        elif (MACDslope < 0) & (MACD[-1] > signal[-1]):
-            return AlgorithmResponse.Sell
+        if (macd_slope > 0) & (macd[-1] < signal[-1]):
+            return AlgorithmResponse.buy
+        elif (macd_slope < 0) & (macd[-1] > signal[-1]):
+            return AlgorithmResponse.sell
         else:
-            return AlgorithmResponse.Hold
+            return AlgorithmResponse.hold
 
 
 class RSIAlgo(Algorithm):
-    def __init__(self, initialData):
+    def __init__(self, initial_data):
         super().__init__(26)
-        self.storedData = initialData
+        self.stored_data = initial_data
 
     def advise(self, data):
-        self.storedData += data
-        RSI = Resource.indicators.relativeStrength()
-        RSIValue = MACD[-1]
+        self.stored_data += data
+        rsi = indicators.relative_strength(self.stored_data)
+        rsi_value = rsi[-1]
 
-        if RSIValue > 70:
-            return AlgorithmResponse.Sell
-        elif RSIValue < 30:
-            return AlgorithmResponse.Buy
+        if rsi_value > 70:
+            return AlgorithmResponse.sell
+        elif rsi_value < 30:
+            return AlgorithmResponse.buy
         else:
-            return AlgorithmResponse.Hold
+            return AlgorithmResponse.hold
+
+
+class TestAlgo(Algorithm):
+    def __init__(self, initial_data):
+        super().__init__(26)
+        self.stored_data = initial_data
+
+    def advise(self, data):
+        self.stored_data += data
+        (macd, signal) = indicators.moving_average_convergence_divergence(
+                            self.stored_data)
+        macd_slope = macd[-1] - macd[-2]
+
+        rsi = indicators.relative_strength(self.stored_data)
+        rsi_value = rsi[-1]
+
+        if (rsi_value < 40) & (macd_slope > 0) & (macd[-1] < signal[-1]):
+            return AlgorithmResponse.buy
+        elif (rsi_value > 60) & (macd_slope < 0) & (macd[-1] > signal[-1]):
+            return AlgorithmResponse.sell
+        else:
+            return AlgorithmResponse.hold

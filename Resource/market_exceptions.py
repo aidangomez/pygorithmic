@@ -1,4 +1,4 @@
-def checkRequest(request):
+def check_request(request):
     code = request.status_code
     if (code == 200):
         return request

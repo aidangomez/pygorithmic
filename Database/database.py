@@ -5,7 +5,6 @@ from Resource.enumerations import SortingOrder
 
 class Database:
     # Object management #
-
     def __init__(self, name):
         self.name = name
         self.tables = dict()
@@ -18,7 +17,7 @@ class Database:
         self.connection = sql.connect(self.name + ".db")
         self.connection.row_factory = sql.Row
         self.cursor = self.connection.cursor()
-        self.__getDatabaseInfo()
+        self.__get_database_info()
 
     def __close(self):
         self.connection.commit()
@@ -26,7 +25,7 @@ class Database:
         self.connection.close()
 
     # Info #
-    def __getDatabaseInfo(self):
+    def __get_database_info(self):
         tables = self.cursor.execute("SELECT name FROM sqlite_master WHERE\
                                      type='table'")
         for table in tables:
@@ -34,11 +33,11 @@ class Database:
             columns = self.cursor.execute("PRAGMA table_info({})".format(name))
             self.tables[name] = [column['name'] for column in columns]
 
-    def numRows(self, table):
+    def row_count(self, table):
         self.cursor.execute("SELECT COUNT(*) AS value FROM {0}".format(table))
         return self.next()['value']
 
-    def rowExists(self, table, values):
+    def row_exists(self, table, values):
         columns = self.tables[table]
         wheres = ["`" + str(column) + "`=\'" + str(value) + "\'" for column,
                   value in zip(columns, values)]
@@ -47,18 +46,18 @@ class Database:
         return self.next()['value'] > 0
 
     # Fetching #
-    def allFromTable(self, table):
+    def all_from_table(self, table):
         self.cursor.execute("SELECT * FROM {0}".format(table))
 
     def next(self):
         return self.cursor.fetchone()
 
-    def nextFromTable(self, table):
-        self.allFromTable(table)
+    def next_from_table(self, table):
+        self.all_from_table(table)
         return self.cursor.fetchone()
 
     # Modifying #
-    def createTable(self, table, columns):
+    def create_table(self, table, columns):
         self.tables[table] = columns
         self.cursor.execute("CREATE TABLE IF NOT EXISTS {0} ({1})"
                             .format(table, ','.join('\"' + str(column) +
@@ -71,31 +70,31 @@ class Database:
                                                     for x in values)))
         self.connection.commit()
 
-    def insertUnique(self, table, values):
-        if not self.rowExists(table, values):
+    def insert_unique(self, table, values):
+        if not self.row_exists(table, values):
             self.insert(table, values)
             return True
         else:
             return False
 
-    def deleteRows(self, table, columns, values):
+    def delete_rows(self, table, columns, values):
         wheres = [str(x) + "=\'" + str(y) + "\'" for x, y
                   in zip(columns, values)]
         self.cursor.execute("DELETE FROM {0} WHERE {1}"
                             .format(table, " AND ".join(wheres)))
         self.connection.commit()
 
-    def update(self, table, updateColumns, updateValues, whereColumns,
-               whereValues):
+    def update(self, table, update_columns, update_values, where_columns,
+               where_values):
         updates = [str(x) + "=\'" + str(y) + "\'" for x, y
-                   in zip(updateColumns, updateValues)]
+                   in zip(update_columns, update_values)]
         wheres = [str(x) + "=\'" + str(y) + "\'" for x, y
-                  in zip(whereColumns, whereValues)]
+                  in zip(where_columns, where_values)]
         self.cursor.execute("UPDATE {0} SET {1} WHERE {2}".format(
             table, ", ".join(updates), "AND ".join(wheres)))
         self.connection.commit()
 
-    def sort(self, table, column, order=SortingOrder.Ascending):
+    def sort(self, table, column, order=SortingOrder.ascending):
         self.cursor.execute("SELECT * FROM {0} ORDER BY {1} {2}"
                             .format(table, column, order))
         self.connection.commit()

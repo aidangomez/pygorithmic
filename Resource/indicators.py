@@ -6,7 +6,7 @@ http://matplotlib.org/examples/pylab_examples/finance_work2.html
 import numpy as np
 
 
-def movingAverage(x, n, mode="exp"):
+def moving_average(x, n, mode="exp"):
     """
     precondition: n > len(x)
     mode can be either 'exp' for exponential, or 'lin' for linear
@@ -23,16 +23,16 @@ def movingAverage(x, n, mode="exp"):
     return result
 
 
-def movingAverageConvergenceDivergence(x, signalTerm=9, fastTerm=12,
-                                       slowTerm=26):
-    slow = movingAverage(x, slowTerm)
-    fast = movingAverage(x, fastTerm)
+def moving_average_convergence_divergence(x, signal_term=9, fast_term=12,
+                                          slow_term=26):
+    slow = moving_average(x, slow_term)
+    fast = moving_average(x, fast_term)
     macd = fast - slow
-    signal = movingAverage(macd, signalTerm)
+    signal = moving_average(macd, signal_term)
     return (macd, signal)
 
 
-def relativeStrength(x, n=14):
+def relative_strength(x, n=14):
     deltas = np.diff(x)
     seed = deltas[:n + 1]
     up = seed[seed >= 0].sum() / n
@@ -70,5 +70,5 @@ def stochastic(x, n=14):
         elif (x[i - n - 1] == low):
             low = np.amin(x[i - n:i])
         stoch[i] = 100 * (x[i] - low) / (high - low)
-    signal = movingAverage(stoch, 3, 'lin')
+    signal = moving_average(stoch, 3, 'lin')
     return (stoch, signal)

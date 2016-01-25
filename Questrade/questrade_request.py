@@ -13,61 +13,63 @@ class MarketRequest:
 
     def __init__(self):
         # read in token information
-        tokenFile = io.open("questrade-tokens/market-tokens.txt")
-        if tokenFile is None:
-            raise Exception("Token file note found at: questrade-tokens/market-tokens.txt")
+        token_file = io.open("questrade-tokens/market-tokens.txt")
+        if token_file is None:
+            raise Exception("Token file note found at:\
+                             questrade-tokens/market-tokens.txt")
 
-        self.key = tokenFile.readline().strip()
-        self.refreshToken = tokenFile.readline().strip()
-        self.server = tokenFile.readline().strip()
-        tokenFile.close()
+        self.key = token_file.readline().strip()
+        self.refresh_token = token_file.readline().strip()
+        self.server = token_file.readline().strip()
+        token_file.close()
 
-    def refreshAuthentication(self):
+    def refresh_authentication(self):
         r = requests.get("https://login.questrade.com/oauth2/token",
                          params={"grant_type": "refresh_token",
-                                 "refresh_token": self.refreshToken})
-        if (checkRequest(r)):
-            tokenFile = io.open("questrade-tokens/market-tokens.txt", mode="wt")
+                                 "refresh_token": self.refresh_token})
+        if (check_request(r)):
+            token_file = io.open("questrade-tokens/market-tokens.txt",
+                                 mode="wt")
             self.key = r.json()["access_token"]
-            self.refreshToken = r.json()["refresh_token"]
+            self.refresh_token = r.json()["refresh_token"]
             self.server = r.json()["api_server"]
-            tokenFile.writelines(
-                '\n'.join([self.key, self.refreshToken, self.server]))
-            tokenFile.close()
+            token_file.writelines(
+                '\n'.join([self.key, self.refresh_token, self.server]))
+            token_file.close()
         return r
 
     def get(self, service, params=None):
         r = requests.get(self.server + service,
                          headers=self.headers(self.key), params=params)
         try:
-            checkRequest(r)
+            check_request(r)
         except (AccessTokenError, BadRequestError):
-            self.refreshAuthentication()
+            self.refresh_authentication()
             r = requests.get(self.server + service,
                              headers=self.headers(self.key), params=params)
-        return checkRequest(r).json()
+        return check_request(r).json()
 
     def post(self, service, params=None):
         r = requests.post(self.server + service,
                           headers=self.headers(self.key), params=params)
         try:
-            checkRequest(r)
+            check_request(r)
         except (AccessTokenError, BadRequestError):
-            self.refreshAuthentication()
+            self.refresh_authentication()
             r = requests.post(self.server + service,
                               headers=self.headers(self.key), params=params)
-        return checkRequest(r).json()
+        return check_request(r).json()
 
     def delete(self, service, params=None):
         r = requests.delete(self.server + service,
                             headers=self.headers(self.key), params=params)
         try:
-            checkRequest(r)
+            check_request(r)
         except (AccessTokenError, BadRequestError):
-            self.refreshAuthentication()
+            self.refresh_authentication()
             r = requests.delete(self.server + service,
                                 headers=self.headers(self.key), params=params)
-        return checkRequest(r).json()
+        return check_request(r).json()
 
 
 class AccountRequest:
@@ -79,58 +81,60 @@ class AccountRequest:
 
     def __init__(self):
         # read in token information
-        tokenFile = io.open("questrade-tokens/account-tokens.txt")
-        if tokenFile is None:
-            raise Exception("Token file note found at: questrade-tokens/account-tokens.txt")
+        token_file = io.open("questrade-tokens/account-tokens.txt")
+        if token_file is None:
+            raise Exception("Token file note found at:\
+                             questrade-tokens/account-tokens.txt")
 
-        self.key = tokenFile.readline().strip()
-        self.refreshToken = tokenFile.readline().strip()
-        self.server = tokenFile.readline().strip()
-        tokenFile.close()
+        self.key = token_file.readline().strip()
+        self.refresh_token = token_file.readline().strip()
+        self.server = token_file.readline().strip()
+        token_file.close()
 
-    def refreshAuthentication(self):
+    def refresh_authentication(self):
         r = requests.get("https://login.questrade.com/oauth2/token",
                          params={"grant_type": "refresh_token",
-                                 "refresh_token": self.refreshToken})
-        if (checkRequest(r)):
-            tokenFile = io.open("questrade-tokens/account-tokens.txt", mode="wt")
+                                 "refresh_token": self.refresh_token})
+        if (check_request(r)):
+            token_file = io.open("questrade-tokens/account-tokens.txt",
+                                 mode="wt")
             self.key = r.json()["access_token"]
-            self.refreshToken = r.json()["refresh_token"]
+            self.refresh_token = r.json()["refresh_token"]
             self.server = r.json()["api_server"]
-            tokenFile.writelines(
-                '\n'.join([self.key, self.refreshToken, self.server]))
-            tokenFile.close()
+            token_file.writelines(
+                '\n'.join([self.key, self.refresh_token, self.server]))
+            token_file.close()
         return r
 
     def get(self, service, params=None):
         r = requests.get(self.server + service,
                          headers=self.headers(self.key), params=params)
         try:
-            checkRequest(r)
+            check_request(r)
         except (AccessTokenError, BadRequestError):
-            self.refreshAuthentication()
+            self.refresh_authentication()
             r = requests.get(self.server + service,
                              headers=self.headers(self.key), params=params)
-        return checkRequest(r).json()
+        return check_request(r).json()
 
     def post(self, service, params=None):
         r = requests.post(self.server + service,
                           headers=self.headers(self.key), params=params)
         try:
-            checkRequest(r)
+            check_request(r)
         except (AccessTokenError, BadRequestError):
-            self.refreshAuthentication()
+            self.refresh_authentication()
             r = requests.post(self.server + service,
                               headers=self.headers(self.key), params=params)
-        return checkRequest(r).json()
+        return check_request(r).json()
 
     def delete(self, service, params=None):
         r = requests.delete(self.server + service,
                             headers=self.headers(self.key), params=params)
         try:
-            checkRequest(r)
+            check_request(r)
         except (AccessTokenError, BadRequestError):
-            self.refreshAuthentication()
+            self.refresh_authentication()
             r = requests.delete(self.server + service,
                                 headers=self.headers(self.key), params=params)
-        return checkRequest(r).json()
+        return check_request(r).json()

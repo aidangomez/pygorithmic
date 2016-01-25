@@ -9,111 +9,110 @@ class AlgoTester:
     Test an algorithm on a single price series.
     '''
     balance = 100000
-    maxBalance = 100000
-    minBalance = 100000
-    purchaseValue = 5000
+    max_balance = 100000
+    min_balance = 100000
+    purchase_value = 5000
 
-    def __init__(self, algorithm, data, stockName, dates):
+    def __init__(self, algorithm, data, stock_name, dates):
         '''
         data - price series
         '''
         self.algo = algorithm
         self.data = data
         self.dates = dates
-        self.stockName = stockName
-        self.accountDatabase = TemporaryDatabase("TestDatabaseAccount")
-        self.accountDatabase.createTable("Transactions",
-                                         ["order", "price", "amount",
-                                          "timestamp"])
-        self.accountDatabase.createTable("OpenPositions",
-                                         ["price", "amount", "opened"])
-        self.accountDatabase.createTable("ClosedPositions",
-                                         ["openPrice", "closePrice", "amount",
-                                          "closed"])
+        self.stock_name = stock_name
+        self.account_database = TemporaryDatabase("TestDatabaseAccount")
+        self.account_database.create_table("Transactions",
+                                           ["order", "price", "amount",
+                                            "timestamp"])
+        self.account_database.create_table("OpenPositions",
+                                           ["price", "amount", "opened"])
+        self.account_database.create_table("ClosedPositions",
+                                           ["openPrice", "closePrice",
+                                            "amount", "closed"])
 
-    def updateBalance(self, difference):
+    def update_balance(self, difference):
         self.balance += difference
-        self.maxBalance = self.balance if (self.balance > self.maxBalance) \
-            else self.maxBalance
-        self.minBalance = self.balance if (self.balance < self.minBalance) \
-            else self.minBalance
+        self.max_balance = self.balance if (self.balance > self.max_balance) \
+            else self.max_balance
+        self.min_balance = self.balance if (self.balance < self.min_balance) \
+            else self.min_balance
 
     def buy(self, timestamp, price, amount):
         print("Buying: " + str(amount) + " $" + str(price) + " @: " +
               str(timestamp))
-        self.accountDatabase.insert("Transactions",
-                                    ["Buy", price, amount, timestamp])
-        row = self.accountDatabase.nextFromTable("OpenPositions")
+        self.account_database.insert("Transactions",
+                                     ["Buy", price, amount, timestamp])
+        row = self.account_database.next_from_table("OpenPositions")
         if (row is not None):
-            oldAmount = int(row["amount"])
-            newAmount = oldAmount + amount
-            oldPrice = float(row["price"])
-            newPrice = (oldPrice * oldAmount + price * amount) / newAmount
-            self.accountDatabase.update("OpenPositions", ["amount", "price"],
-                                        [newAmount, newPrice], ["amount"],
-                                        [oldAmount])
+            old_amount = int(row["amount"])
+            new_amount = old_amount + amount
+            old_price = float(row["price"])
+            new_price = (old_price * old_amount + price * amount) / new_amount
+            self.account_database.update("OpenPositions", ["amount", "price"],
+                                         [new_amount, new_price], ["amount"],
+                                         [old_amount])
         else:
-            self.accountDatabase.insert("OpenPositions",
-                                        [price, amount, timestamp])
+            self.account_database.insert("OpenPositions",
+                                         [price, amount, timestamp])
 
-        self.updateBalance(-1 * price * amount)
+        self.update_balance(-1 * price * amount)
 
     def sell(self, timestamp, price, amount="all"):
         print("Selling: " + str(amount) + " $" + str(price) + " @: " +
               str(timestamp))
-        row = self.accountDatabase.nextFromTable("OpenPositions")
+        row = self.account_database.next_from_table("OpenPositions")
         if (row is None):
             return
-        openPrice = float(row["price"])
+        open_price = float(row["price"])
         if (amount == "all"):
             amount = int(row["amount"])
-            self.accountDatabase.deleteRows("OpenPositions", ["price"],
-                                            [openPrice])
+            self.account_database.delete_rows("OpenPositions", ["price"],
+                                              [open_price])
         else:
-            openAmount = int(row["amount"])
-            self.accountDatabase.update("OpenPositions", ["amount"],
-                                        [openAmount-amount], ["amount"],
-                                        [openAmount])
-        self.accountDatabase.insert("Transactions",
-                                    ["Sell", price, amount, timestamp])
-        self.accountDatabase.insert("ClosedPositions",
-                                    [openPrice, price, amount, timestamp])
+            open_amount = int(row["amount"])
+            self.account_database.update("OpenPositions", ["amount"],
+                                         [open_amount - amount], ["amount"],
+                                         [open_amount])
+        self.account_database.insert("Transactions",
+                                     ["Sell", price, amount, timestamp])
+        self.account_database.insert("ClosedPositions",
+                                     [open_price, price, amount, timestamp])
 
-        self.updateBalance(amount * price)
+        self.update_balance(amount * price)
 
-    def evaluate(self, chunkSize):
+    def evaluate(self, chunk_size):
         '''
         make guesses
 
-        chunkSize - minimum amount of data neccessary to evaluate using algo
+        chunk_size - minimum amount of data neccessary to evaluate using algo
         '''
         i = 0
-        while (i + chunkSize <= len(self.data)):
-            chunk = self.data[i:i+chunkSize]
-            lastPrice = self.data[i+chunkSize - 1]
-            purchaseAmount = int(self.purchaseValue // lastPrice)
+        while (i + chunk_size <= len(self.data)):
+            chunk = self.data[i:i + chunk_size]
+            last_price = self.data[i + chunk_size - 1]
+            purchase_amount = int(self.purchase_value // last_price)
             advice = self.algo.advise(chunk)
-            if (advice == AlgorithmResponse.Buy):
-                self.buy(self.dates[i+chunkSize - 1], lastPrice,
-                         purchaseAmount)
-            elif (advice == AlgorithmResponse.Sell):
-                self.sell(self.dates[i+chunkSize - 1],
-                          self.data[i+chunkSize - 1])
-            i += chunkSize
+            if (advice == AlgorithmResponse.buy):
+                self.buy(self.dates[i + chunk_size - 1], last_price,
+                         purchase_amount)
+            elif (advice == AlgorithmResponse.sell):
+                self.sell(self.dates[i + chunk_size - 1],
+                          self.data[i + chunk_size - 1])
+            i += chunk_size
 
-        if (i < len(self.data)):
-            self.sell(self.dates[len(self.data) - 1], self.data[-1])
+        self.sell(self.dates[len(self.data) - 1], self.data[-1])
 
         self.report()
 
     def report(self):
         print("************ Algorithm Analysis Report ************" + '\n' +
               "Starting balance: 100000" + '\n' +
-              "Minimum balance: " + str(self.minBalance) + '\n' +
-              "Maximum balance: " + str(self.maxBalance) + '\n' +
+              "Minimum balance: " + str(self.min_balance) + '\n' +
+              "Maximum balance: " + str(self.max_balance) + '\n' +
               "End balance: " + str(self.balance) + '\n' +
               "Net profit ($): " + str(self.balance - 100000) + '\n' +
               "Net profit (%): " + str(self.balance / 1000 - 100) + '\n' +
               '\n' +
               "Number of transactions: " +
-              str(self.accountDatabase.numRows("Transactions")))
+              str(self.account_database.row_count("Transactions")))

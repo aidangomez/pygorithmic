@@ -2,14 +2,14 @@ from dateutil.relativedelta import *
 
 
 class AlgorithmResponse:
-    Buy = "Buy"
-    Sell = "Sell"
-    Hold = "Hold"
+    buy = "Buy"
+    sell = "Sell"
+    hold = "Hold"
 
 
 class SortingOrder:
-    Ascending = "ASC"
-    Descending = "DESC"
+    ascending = "ASC"
+    descending = "DESC"
 
 
 class Interval:
@@ -80,34 +80,34 @@ class Interval:
 
 
 class OrderType:
-    Market = "Market"
-    Limit = "Limit"
-    Stop = "Stop"
-    StopLimit = "StopLimit"
-    TrailStopInPercentage = "TrailStopInPercentage"
-    TrailStopInDollar = "TrailStopInDollar"
-    TrailStopLimitInPercentage = "TrailStopLimitInPercentage"
-    TrailStopLimitInDollar = "TrailStopLimitInDollar"
-    LimitOnOpen = "LimitOnOpen"
-    LimitOnClose = "LimitOnClose"
+    market = "Market"
+    limit = "Limit"
+    stop = "Stop"
+    stop_limit = "StopLimit"
+    trail_stop_in_percentage = "TrailStopInPercentage"
+    trail_stop_in_dollar = "TrailStopInDollar"
+    trail_stop_limit_in_percentage = "TrailStopLimitInPercentage"
+    trail_stop_limit_in_dollar = "TrailStopLimitInDollar"
+    limit_on_open = "LimitOnOpen"
+    limit_on_close = "LimitOnClose"
 
 
 class RequestType:
 
     class Market:
-        searchSymbol = "v1/symbols/search"
+        search_symbol = "v1/symbols/search"
 
-        def getInfo(id): return "v1/symbols/%s" % id
+        def get_info(id): return "v1/symbols/%s" % id
 
-        def getQuotes(id): return "v1/markets/candles/%s" % id
+        def get_quotes(id): return "v1/markets/candles/%s" % id
 
     class Account:
-        getAccounts = "v1/accounts"
+        get_accounts = "v1/accounts"
 
-        def getPositions(id): return "v1/accounts/%s/positions" % id
+        def get_positions(id): return "v1/accounts/%s/positions" % id
 
-        def getBalances(id): return "v1/accounts/%s/balances" % id
+        def get_balances(id): return "v1/accounts/%s/balances" % id
 
-        def getExecutions(id): return "v1/accounts/%s/executions" % id
+        def get_executions(id): return "v1/accounts/%s/executions" % id
 
         def order(id): return "v1/accounts/%s/orders" % id

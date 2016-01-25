@@ -18,23 +18,29 @@ class Quote:
 
 class Time:
 
-    def __init__(self, timestamp=None, year=1, month=1, day=1, hour=0, min=0,
-                 sec=0, interval=Interval.OneDay):
-        if (timestamp is None):
+    @staticmethod
+    def now():
+        return Time(datetime_object=datetime.now())
+
+    def __init__(self, datetime_object=None, timestamp=None, year=1, month=1,
+                 day=1, hour=0, min=0, sec=0, interval=Interval.OneDay):
+        if (datetime_object is not None):
+            self.date = datetime_object
+        elif (timestamp is None):
             self.date = datetime(year, month, day, hour, min, sec)
         else:
-            timeobj = time.strptime(timestamp[:19], "%Y-%m-%dT%H:%M:%S")
-            self.date = datetime.fromtimestamp(time.mktime(timeobj))
+            time_object = time.strptime(timestamp[:19], "%Y-%m-%dT%H:%M:%S")
+            self.date = datetime.fromtimestamp(time.mktime(time_object))
         self.interval = interval
 
     def __repr__(self):
         return self.date.isoformat() + "-05:00"
 
     def __add__(self, b):
-        newDate = self.date + b * self.interval.delta
-        newTime = Time(interval=self.interval)
-        newTime.date = newDate
-        return newTime
+        new_date = self.date + b * self.interval.delta
+        new_time = Time(interval=self.interval)
+        new_time.date = new_date
+        return new_time
 
     def __iadd__(self, b):
         self.date += b * self.interval.delta
