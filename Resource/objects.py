@@ -47,19 +47,37 @@ class Time:
         return self
 
     def __lt__(self, b):
-        return self.date < b
+        if isinstance(b, Time):
+            return self.date < b.date
+        else:
+            return self.date < b
 
     def __le__(self, b):
-        return self.date <= b
+        if isinstance(b, Time):
+            return self.date <= b.date
+        else:
+            return self.date <= b
 
     def __eq__(self, b):
-        return self.date == b
+        if isinstance(b, Time):
+            return self.date == b.date
+        else:
+            return self.date == b
 
     def __ne__(self, b):
-        return self.date != b
+        if isinstance(b, Time):
+            return self.date != b.date
+        else:
+            return self.date != b
 
     def __gt__(self, b):
-        return self.date > b
+        if isinstance(b, Time):
+            return self.date > b.date
+        else:
+            return self.date > b
 
     def __ge__(self, b):
-        return self.date >= b
+        if isinstance(b, Time):
+            return self.date >= b.date
+        else:
+            return self.date >= b
