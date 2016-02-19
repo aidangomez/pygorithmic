@@ -17,14 +17,14 @@ def stock_quotes(symbol, start_date, end_date):
                                })["candles"]
 
 def fetch_market_data(symbol, start_date, end_date=Time.now(),
-                      action=lambda x: return):
+                      action=lambda x: x):
     batch_start_time = start_date
     batch_end_time = start_date + 1000
     while (batch_end_time < end_date):
         quotes = stock_quotes(symbol, batch_start_time,
                                              batch_end_time)
         action(quotes)
-        
+
         batch_start_time += 1000
         batch_end_time += 1000
 
