@@ -1,5 +1,5 @@
-from Questrade import questrade_request
-from Resource.enumerations import RequestType
+from . import questrade_request
+from ..Resource.enumerations import RequestType
 
 
 class Account:

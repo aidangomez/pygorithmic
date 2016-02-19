@@ -1,6 +1,6 @@
 import sqlite3 as sql
 
-from Resource.enumerations import SortingOrder
+from ..Resource.enumerations import SortingOrder
 
 
 class Database:

@@ -1,8 +1,8 @@
 import sqlite3
 
-from Questrade import questrade_request
-from Resource.enumerations import Interval, RequestType
-from Resource.objects import Time, Quote
+from . import questrade_request
+from ..Resource.enumerations import Interval, RequestType
+from ..Resource.objects import Time, Quote
 
 
 def stock_quotes(symbol, start_date, end_date):

@@ -1,7 +1,7 @@
-from Debug import plot_graph
-from Resource.algorithm import Algorithm
-from Resource.enumerations import AlgorithmResponse
-from Resource import indicators
+from . import plot_graph
+from ..Resource.algorithm import Algorithm
+from ..Resource.enumerations import AlgorithmResponse
+from ..Resource import indicators
 
 
 class SampleAlgo(Algorithm):

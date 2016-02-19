@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from Resource.enumerations import AlgorithmResponse
+from .enumerations import AlgorithmResponse
 
 
 class Algorithm(metaclass=ABCMeta):

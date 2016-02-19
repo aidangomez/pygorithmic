@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from Database import database
-from Resource.enumerations import SortingOrder
-from Resource.objects import Time
-from Questrade import market_fetcher
+from . import database
+from ..Resource.enumerations import SortingOrder
+from ..Resource.objects import Time
+from ..Questrade import market_fetcher
 
 
 def populate(db, symbol, start_date, end_date=Time.now()):

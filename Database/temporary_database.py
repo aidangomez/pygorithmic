@@ -1,6 +1,6 @@
 import os
 
-from Database import database
+from . import database
 
 
 class TemporaryDatabase(database.Database):

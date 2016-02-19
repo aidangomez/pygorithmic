@@ -1,7 +1,7 @@
 import requests
 import io
 
-from Resource.market_exceptions import *
+from ..Resource.market_exceptions import *
 
 
 class MarketRequest:

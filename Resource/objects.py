@@ -1,7 +1,7 @@
 from datetime import datetime, tzinfo
 import time
 
-from Resource.enumerations import Interval
+from .enumerations import Interval
 
 
 class Quote:

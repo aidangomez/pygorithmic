@@ -1,7 +1,7 @@
-from Resource import algorithm
-from Resource.enumerations import AlgorithmResponse
-from Resource.objects import Time
-from Database.temporary_database import TemporaryDatabase
+from ..Resource import algorithm
+from ..Resource.enumerations import AlgorithmResponse
+from ..Resource.objects import Time
+from ..Database.temporary_database import TemporaryDatabase
 
 
 class AlgoTester:
