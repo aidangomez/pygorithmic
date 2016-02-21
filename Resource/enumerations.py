@@ -97,17 +97,23 @@ class RequestType:
     class Market:
         search_symbol = "v1/symbols/search"
 
+        @staticmethod
         def get_info(id): return "v1/symbols/%s" % id
 
+        @staticmethod
         def get_quotes(id): return "v1/markets/candles/%s" % id
 
     class Account:
         get_accounts = "v1/accounts"
 
+        @staticmethod
         def get_positions(id): return "v1/accounts/%s/positions" % id
 
+        @staticmethod
         def get_balances(id): return "v1/accounts/%s/balances" % id
 
+        @staticmethod
         def get_executions(id): return "v1/accounts/%s/executions" % id
 
+        @staticmethod
         def order(id): return "v1/accounts/%s/orders" % id
