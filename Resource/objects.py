@@ -19,18 +19,18 @@ class Quote:
 class Time:
 
     @staticmethod
-    def now():
-        return Time(datetime_object=datetime.now())
+    def now(interval=Interval.OneDay):
+        return Time(datetime_object=datetime.now(), interval=interval)
 
     def __init__(self, datetime_object=None, timestamp=None, year=1, month=1,
                  day=1, hour=0, min=0, sec=0, interval=Interval.OneDay):
         if (datetime_object is not None):
             self.date = datetime_object
-        elif (timestamp is None):
-            self.date = datetime(year, month, day, hour, min, sec)
-        else:
+        elif (timestamp is not None):
             time_object = time.strptime(timestamp[:19], "%Y-%m-%dT%H:%M:%S")
             self.date = datetime.fromtimestamp(time.mktime(time_object))
+        else:
+            self.date = datetime(year, month, day, hour, min, sec)
         self.interval = interval
 
     def __repr__(self):
