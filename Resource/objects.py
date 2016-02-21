@@ -46,6 +46,16 @@ class Time:
         self.date += b * self.interval.delta
         return self
 
+    def __sub__(self, b):
+        new_date = self.date - b * self.interval.delta
+        new_time = Time(interval=self.interval)
+        new_time.date = new_date
+        return new_time
+
+    def __isub__(self, b):
+        self.date -= b * self.interval.delta
+        return self
+
     def __lt__(self, b):
         if isinstance(b, Time):
             return self.date < b.date
