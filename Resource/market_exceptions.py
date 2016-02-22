@@ -43,10 +43,12 @@ class BadRequestError(Exception):
                 self.value = "Argument length exceeds limit."
             elif (code == 1004):
                 self.value = "Missing required argument."
+            elif (code == 1013):
+                self.value = "Requesting anything other than ‘application/json’."
             elif (code == 1015):
                 self.value = "Invalid argument."
         except ValueError:
-            self.value = "Bad Request: " + str(value.headers)
+            self.value = "Bad Request: " + str(value.content)
 
     def __str__(self):
         return repr(self.value)
