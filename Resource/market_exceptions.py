@@ -34,9 +34,9 @@ class AccessTokenError(Exception):
 
 class BadRequestError(Exception):
 
-    def __init__(self, value):
+    def __init__(self, response):
         try:
-            code = value.json()["code"]
+            code = response.json()["code"]
             if (code == 1002):
                 self.value = "Invalid argument."
             elif (code == 1003):
@@ -48,7 +48,7 @@ class BadRequestError(Exception):
             elif (code == 1015):
                 self.value = "Invalid argument."
         except ValueError:
-            self.value = "Bad Request: " + str(value.content)
+            self.value = "Bad Request: " + str(response.content) + str(response.text) + str(response.json)
 
     def __str__(self):
         return repr(self.value)
