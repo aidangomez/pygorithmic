@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+import time
+
 def check_request(request):
     code = request.status_code
     if (code == 200):
@@ -13,8 +16,13 @@ def check_request(request):
     elif (code == 413):
         raise LimitExceededError("Request too large.")
     elif (code == 429):
-        raise LimitExceededError("Too many requests. Reset in: " +
-                                 str(request.headers["X-RateLimit-Reset"]))
+        delta = (datetime.utcfromtimestamp(int(request.headers["X-RateLimit-Reset"])) - datetime.utcnow()).total_seconds()
+        print("Too many requests. Reset in: " + str(delta) + "secs")
+        if int(delta) > 0:
+            time.sleep(int(delta) + 1)
+        else:
+            time.sleep(1)
+        raise RetryCall("Retrying the call...")
     elif (code in [500, 502, 503]):
         raise APIError("Questrade API failed.")
     else:
@@ -24,6 +32,15 @@ def check_request(request):
 
 
 class AccessTokenError(Exception):
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
+
+class APIError(Exception):
 
     def __init__(self, value):
         self.value = value
@@ -54,6 +71,15 @@ class BadRequestError(Exception):
         return repr(self.value)
 
 
+class LimitExceededError(Exception):
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
+
 class NotFoundError(Exception):
 
     def __init__(self, value):
@@ -74,16 +100,7 @@ class NotFoundError(Exception):
         return repr(self.value)
 
 
-class LimitExceededError(Exception):
-
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        return repr(self.value)
-
-
-class APIError(Exception):
+class RetryCall(Exception):
 
     def __init__(self, value):
         self.value = value

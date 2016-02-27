@@ -47,6 +47,9 @@ class MarketRequest:
             self.refresh_authentication()
             r = requests.get(self.server + service,
                              headers=self.headers(self.key), params=params)
+        except RetryCall:
+            r = requests.get(self.server + service,
+                             headers=self.headers(self.key), params=params)
         return check_request(r).json()
 
     def post(self, service, params=None):
@@ -58,6 +61,9 @@ class MarketRequest:
             self.refresh_authentication()
             r = requests.post(self.server + service,
                               headers=self.headers(self.key), params=params)
+        except RetryCall:
+            r = requests.get(self.server + service,
+                             headers=self.headers(self.key), params=params)
         return check_request(r).json()
 
     def delete(self, service, params=None):
@@ -69,6 +75,9 @@ class MarketRequest:
             self.refresh_authentication()
             r = requests.delete(self.server + service,
                                 headers=self.headers(self.key), params=params)
+        except RetryCall:
+            r = requests.get(self.server + service,
+                             headers=self.headers(self.key), params=params)
         return check_request(r).json()
 
 
@@ -115,6 +124,9 @@ class AccountRequest:
             self.refresh_authentication()
             r = requests.get(self.server + service,
                              headers=self.headers(self.key), params=params)
+        except RetryCall:
+            r = requests.get(self.server + service,
+                             headers=self.headers(self.key), params=params)
         return check_request(r).json()
 
     def post(self, service, params=None):
@@ -126,6 +138,9 @@ class AccountRequest:
             self.refresh_authentication()
             r = requests.post(self.server + service,
                               headers=self.headers(self.key), params=params)
+        except RetryCall:
+            r = requests.get(self.server + service,
+                             headers=self.headers(self.key), params=params)
         return check_request(r).json()
 
     def delete(self, service, params=None):
@@ -137,4 +152,7 @@ class AccountRequest:
             self.refresh_authentication()
             r = requests.delete(self.server + service,
                                 headers=self.headers(self.key), params=params)
+        except RetryCall:
+            r = requests.get(self.server + service,
+                             headers=self.headers(self.key), params=params)
         return check_request(r).json()
