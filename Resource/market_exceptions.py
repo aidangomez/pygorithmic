@@ -44,7 +44,7 @@ class BadRequestError(Exception):
             elif (code == 1004):
                 self.value = "Missing required argument."
             elif (code == 1013):
-                self.value = "Requesting anything other than ‘application/json’."
+                self.value = "Requesting anything other than 'application/json'."
             elif (code == 1015):
                 self.value = "Invalid argument."
         except ValueError:
