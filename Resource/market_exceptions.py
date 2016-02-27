@@ -22,7 +22,8 @@ def check_request(request):
             time.sleep(int(delta) + 1)
         else:
             time.sleep(1)
-        raise RetryCall("Retrying the call...")
+        print("Retrying the call...")
+        raise RetryCall("Failed to retry the call.")
     elif (code in [500, 502, 503]):
         raise APIError("Questrade API failed.")
     else:
