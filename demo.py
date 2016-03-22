@@ -1,30 +1,30 @@
-from Database.database import *
-from Database import populate_database
+from pygorithmic.Database.database import *
+from pygorithmic.Database import populate_database
 
-from Debug.algo_tester import *
-from Debug.plot_graph import *
-from Debug.sample_algo import *
+from pygorithmic.Debug.algo_tester import *
+from pygorithmic.Debug.plot_graph import *
+from pygorithmic.Debug.sample_algo import *
 
-from Resource.algorithm import *
-from Resource.enumerations import *
-from Resource.indicators import *
-from Resource.objects import *
+from pygorithmic.Resource.algorithm import *
+from pygorithmic.Resource.enumerations import *
+from pygorithmic.Resource.indicators import *
+from pygorithmic.Resource.objects import *
 
-from Questrade.account_manager import *
-from Questrade.market_fetcher import *
-from Questrade.questrade_request import *
+from pygorithmic.Questrade.account_manager import *
+from pygorithmic.Questrade.market_fetcher import *
+from pygorithmic.Questrade.questrade_request import *
 
 
 if __name__ == '__main__':
-    # Using AAPL with data from 1990 to today
-    stock_name = "NUGT"
-    start_date = Time(year=2014, month=1, day=1)
+    # Using AAPL with data from Jan 1, 1990 to today
+    stock_name = "AAPL"
+    start_date = Time(year=1990, month=1, day=1)
 
     data = []
     dates = []
 
     # Create a database and populate it with Apple's trade data
-    db = Database("test")
+    db = Database("demo")
     populate_database.populate(db, stock_name, start_date)
 
     db.cursor.execute("SELECT * FROM {}".format(stock_name))

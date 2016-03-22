@@ -29,7 +29,7 @@ def populate(db, symbol, start_date, end_date=Time.now()):
             db.insert_unique(symbol, [timestamp, open, close, high, low,
                                       volume])
 
-    fetch_market_data(symbol, start_date, end_date=end_date,
+    market_fetcher.fetch_market_data(symbol, start_date, end_date=end_date,
                       action=add_to_database)
 
     db.sort(symbol, "timestamp")
